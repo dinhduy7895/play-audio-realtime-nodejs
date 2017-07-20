@@ -14,7 +14,6 @@ io.on('connection', function(socket){
 	console.log('connected');
 
 	socketIdList.splice(0,0,socket.id);
-	console.log(socketIdList);
 	if(socketIdList.length > 1){
 		var lateSocketId = socketIdList[socketIdList.length-1];
 		io.to(lateSocketId).emit('getCurrentTime');
@@ -42,6 +41,10 @@ io.on('connection', function(socket){
 
 	socket.on('change', function(data){
 		socket.broadcast.emit('change', data);
+	});
+
+	socket.on('volume', function(data){
+		socket.broadcast.emit('volume', data);
 	});
 	socket.on('disconnect', function(){
 		var index = socketIdList.indexOf(socket.id);

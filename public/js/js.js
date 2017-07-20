@@ -5,7 +5,7 @@ $(function(){
 	cover = $('.cover');
 	song = new Audio('test.ogg','test.mp3');
 	duration = song.duration;
-			console.log(song.duration);	
+
 	if (song.canPlayType('audio/mpeg;')) {
 	  	song.type= 'audio/mpeg';
 	  	song.src= 'test.mp3';
@@ -14,12 +14,10 @@ $(function(){
 	  	song.src= 'test.ogg';
 	}
 
-
+	// Handle events
 	$('.player').on('click','#play', function(e){
 		socket.emit('play');
 		play();
-			
-
 		e.preventDefault();
 	});
 
@@ -53,12 +51,40 @@ $(function(){
 		socket.emit('change', $("#seek").val());
 	});
 
+	var timeDrag = false;  
+	$('.progressBar').mousedown(function(e) {
+	    timeDrag = true;
+	    socket.emit('volume', e.pageX);
+	    updatebar(e.pageX);
+	});
+
+	$(document).mouseup(function(e) {
+	    if(timeDrag) {
+	        timeDrag = false;
+	        socket.emit('volume', e.pageX);
+	        updatebar(e.pageX);
+	    }
+	});
+
+	$(document).mousemove(function(e) {
+	    if(timeDrag) {
+	    	socket.emit('volume', e.pageX);
+	        updatebar(e.pageX);
+	    }
+	});
+ 
+	song.addEventListener("ended", function(){
+	    song.currentTime = 0;
+		$('#pause').replaceWith('<a class="button gradient" id="play" href="" title=""><span class="glyphicon glyphicon-play" aria-hidden="true"></a>');
+	});
+
 	song.addEventListener('timeupdate',function (){
 		curtime = parseInt(song.currentTime, 10);
 		$("#seek").attr("value", curtime);
 		$("#seek").val(curtime);
 	});
 
+// function
 	function play(){
 		song.play();
 		$('#play').replaceWith('<a class="button gradient" id="pause" href="" title=""><span class="glyphicon glyphicon-pause" aria-hidden="true"></a>');
@@ -74,12 +100,14 @@ $(function(){
 
 	function mute(){
 		song.volume = 0;
+		$('.timeBar').css('width', '0%');
 		$('#mute').replaceWith('<a class="button gradient" id="muted" href="" title=""><span class="glyphicon glyphicon-volume-off" aria-hidden="true"></a>');
 		return false;
 	}
 
 	function muted(){
 		song.volume = 1;
+		$('.timeBar').css('width', '100%');
 		$('#muted').replaceWith('<a class="button gradient" id="mute" href="" title=""><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></a>');
 		return false;
 	}
@@ -89,6 +117,21 @@ $(function(){
 		$("#seek").attr("max", song.duration);
 	}
 
+	var updatebar = function(x) {
+	    var progress = $('.progressBar');
+	    var position = x - progress.offset().left; //Click pos
+	    var percentage = 100 * position / progress.width();
+		if(percentage > 100) {
+	        percentage = 100;
+	    }
+	    if(percentage < 0) {
+	        percentage = 0;
+	    }
+	    $('.timeBar').css('width', percentage+'%');
+	    song.volume = 1 * percentage / 100;
+	};
+	
+// Socket
 	socket.on('getCurrentTime', function(){
 		var currentTime = parseInt(song.currentTime, 10);
 		var maxTime = song.duration;
@@ -130,4 +173,10 @@ $(function(){
 		song.currentTime =  data;
 		$("#seek").val(data);
 	});
+
+	socket.on('volume', function(data){
+		updatebar(data);
+	});
+
+	
 })
