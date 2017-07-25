@@ -2,7 +2,6 @@
 	var socket = io();
 	songs = new Array();
 	container = $('.container');
-	var server = window.location.protocol + "//" + window.location.host + "/";
 	var listSong = $('.player');
 	for( var i = 0 ; i < listSong.length; i++){
 		var name = $(listSong[i]).attr('id') ;
@@ -53,27 +52,24 @@
 		socket.emit('change', $('#'+audioName+" #seek").val(), audioName);
 	});
 
-	// var timeDrag = false;  
-	// $('.progressBar').mousedown(function(e) {
-	//     timeDrag = true;
-	//     socket.emit('volume', e.pageX);
-	//     updatebar(e.pageX);
-	// });
+	var timeDrag = false;  
+	$('.progressBar').mousedown(function(e) {
+	    timeDrag = true;
+	    updatebar(e.pageX, getAudioName(e));
+	});
 
-	// $(document).mouseup(function(e) {
-	//     if(timeDrag) {
-	//         timeDrag = false;
-	//         socket.emit('volume', e.pageX);
-	//         updatebar(e.pageX);
-	//     }
-	// });
+	$(document).mouseup(function(e) {
+	    if(timeDrag) {
+	        timeDrag = false;
+	        updatebar(e.pageX, getAudioName(e));
+	    }
+	});
 
-	// $(document).mousemove(function(e) {
-	//     if(timeDrag) {
-	//     	socket.emit('volume', e.pageX);
-	//         updatebar(e.pageX);
-	//     }
-	// });
+	$(document).mousemove(function(e) {
+	    if(timeDrag) {
+	        updatebar(e.pageX, getAudioName(e));
+	    }
+	});
  	for( var i = 0 ; i < listSong.length; i++){			
 		audioName = $(listSong[i]).attr('id');
 
@@ -139,8 +135,9 @@
 		$('#'+audioName+" #seek").attr("max", song.duration);
 	}
 
-	var updatebar = function(x) {
-	    var progress = $('.progressBar');
+	var updatebar = function(x, audioId) {
+	    var progress = $('#'+audioId+' .progressBar');
+	    console.log(progress);
 	    var position = x - progress.offset().left; //Click pos
 	    var percentage = 100 * position / progress.width();
 		if(percentage > 100) {
@@ -149,8 +146,8 @@
 	    if(percentage < 0) {
 	        percentage = 0;
 	    }
-	    $('.timeBar').css('width', percentage+'%');
-	    song.volume = 1 * percentage / 100;
+	    $('#'+audioId+' .timeBar').css('width', percentage+'%');
+	    songs[audioId].volume = 1 * percentage / 100;
 	};
 	
 	function getAudioName(e){
