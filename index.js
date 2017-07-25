@@ -23,24 +23,24 @@ io.on('connection', function(socket){
 		io.to(socketIdList[0]).emit('setCurrentTime', data);
 	});
 
-	socket.on('play', function(){
-		socket.broadcast.emit('play');
+	socket.on('play', function(audioName){
+		socket.broadcast.emit('play',audioName);
 	});
 
-	socket.on('pause', function(){
-		socket.broadcast.emit('pause');
+	socket.on('pause', function(audioName){
+		socket.broadcast.emit('pause',audioName);
 	});
 
-	socket.on('mute', function(){
-		socket.broadcast.emit('mute');
+	socket.on('mute', function(audioName){
+		socket.broadcast.emit('mute', audioName);
 	});
 
-	socket.on('muted', function(){
-		socket.broadcast.emit('muted');
+	socket.on('muted', function(audioName){
+		socket.broadcast.emit('muted', audioName);
 	});
 
-	socket.on('change', function(data){
-		socket.broadcast.emit('change', data);
+	socket.on('change', function(data,audioName){
+		socket.broadcast.emit('change', data, audioName);
 	});
 
 	socket.on('volume', function(data){

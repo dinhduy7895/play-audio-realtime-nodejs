@@ -15,13 +15,14 @@ background: -webkit-linear-gradient(top, #494949 0%, #434242 31%, #393838 55%, #
 }
  
 .container {
+    margin-bottom : 10px;
     -webkit-transition: all .7s ease;
     -moz-transition: all .7s ease;
     -o-transition: all .7s ease;
     -ms-transition: all .7s ease;
     transition: all .7s ease;
-    position: absolute;
-    width: 700px;
+/*    position: absolute;
+*/    width: 700px;
     height: 70px;
  
     -webkit-border-radius: 10px;
@@ -31,10 +32,10 @@ background: -webkit-linear-gradient(top, #494949 0%, #434242 31%, #393838 55%, #
     -webkit-box-shadow: 0px 0px 13px rgba(0,0,0,.3),inset 0 1px 0px rgba(255,255,255,.2);
     -moz-box-shadow: 0px 0px 13px rgba(0,0,0,.3),inset 0 1px 0px rgba(255,255,255,.2);
     box-shadow: 0px 0px 13px rgba(0,0,0,.3),inset 0 1px 0px rgba(255,255,255,.2);
-    top: 50%;
-    left: 50%;
-    margin: -214px 0px 0px -214px;
-    padding: 10px;
+   /* top: 50%;
+    left: 50%;*/
+/*    margin: -214px 0px 0px -214px;
+*/    padding: 10px;
  
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -42,11 +43,12 @@ background: -webkit-linear-gradient(top, #494949 0%, #434242 31%, #393838 55%, #
     box-sizing: border-box;
 }
  .player {
+    margin-top : 9px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
-    position: absolute;
+    position: relative;
     width: 300px;
     bottom: 10px;
     width: 95%;
@@ -61,7 +63,7 @@ background: -webkit-linear-gradient(top, #494949 0%, #434242 31%, #393838 55%, #
     display: block;
     width: 34px;
     height: 34px;
-    //background-image: url(../images/sprite.png);
+    /*//background-image: url(../images/sprite.png);*/
     background-repeat: no-repeat;
     float: left;
     margin-right: 5px;
